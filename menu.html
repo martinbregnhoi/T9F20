@@ -47,13 +47,15 @@
 
         }
 
-        function loadMenu(){
-            fetch("http://mabe-kea.dk/E19/babushka/nav.html").then(response=>response.text()).then(navigation => opretMenu(navigation));
-         
-        }
-        function opretMenu(e){
-            document.querySelector("nav").innerHTML = e;
-        }
+//        async function loadMenu(){
+//            let data = await fetch("http://mabe-kea.dk/E19/babushka/nav.html");
+//			let navigation = await data.text();
+//			opretMenu(navigation);
+//
+//        }
+//        function opretMenu(e){
+//            document.querySelector("nav").innerHTML = e;
+//        }
         
         function visRetter() {
             retter.forEach(ret => {
