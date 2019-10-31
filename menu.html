@@ -11,6 +11,7 @@
     <header>
         <img src="imgs/red_star.svg" alt="">
     </header>
+    <nav></nav>
     <main>
         <h1 id="overskrift">Menu</h1>
         <section id="menu-container"></section>
@@ -35,6 +36,7 @@
 
         function start() {
             getJson();
+            loadMenu();
         }
 
         async function getJson() {
@@ -45,6 +47,14 @@
 
         }
 
+        function loadMenu(){
+            fetch("http://mabe-kea.dk/E19/babushka/nav.html").then(response=>response.text()).then(navigation => opretMenu(navigation));
+         
+        }
+        function opretMenu(e){
+            document.querySelector("nav").innerHTML = e;
+        }
+        
         function visRetter() {
             retter.forEach(ret => {
                 const theClone = theTemplatePointer.cloneNode(true).content;
