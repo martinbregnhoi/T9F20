@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <h1></h1>
+    <main>
+        <article></article>
+    </main>
+    <script>
+    let indhold;
+        document.addEventListener("DOMContentLoaded", hentJson);
+
+        async function hentJson(){
+
+            const url = "https://mabe-kea.dk/E19/babushka/wordpress/wp-json/wp/v2/pages/5";
+            let myJson = await fetch(url);
+
+            indhold = await myJson.json();
+            console.log("indhold: ",indhold);
+
+            visIndhold();
+        }
+
+        function visIndhold(){
+
+            document.querySelector("h1").textContent = indhold.title.rendered;
+            document.querySelector("article").innerHTML = indhold.content.rendered;
+        }
+
+
+
+    </script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bistro Babushka</title>
+    <link type="text/css" href="css/styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <img src="imgs/red_star.svg" alt="">
+    </header>
+    <main>
+        <h1 id="overskrift">Menu</h1>
+        <section id="menu-container"></section>
+    </main>
+    <template>
+        <article>
+            <h2></h2>
+            <p></p>
+        </article>
+    </template>
+    <footer>
+        <section>
+            <address>Addresse: <br>Grønnegade 97<br>1234 København K </address>
+            <aside>Åbningstider: <br> Mandag – fredag 10:30 – 22:00<br>Lørdag 12:00 – 23:00</aside>
+        </section>
+    </footer>
+    <script>
+        let retter = [];
+        const dest = document.querySelector("#menu-container");
+        const theTemplatePointer = document.querySelector("template");
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            getJson();
+        }
+
+        async function getJson() {
+            const url = "http://mabe-kea.dk/E19/babushka/wordpress/wp-json/wp/v2/posts?per_page=100";
+            let jsonData = await fetch(url);
+            retter = await jsonData.json();
+            visRetter();
+
+        }
+
+        function visRetter() {
+            retter.forEach(ret => {
+                const theClone = theTemplatePointer.cloneNode(true).content;
+                theClone.querySelector("h2").textContent = ret.title.rendered;
+                theClone.querySelector("p").innerHTML = ret.excerpt.rendered;
+                dest.appendChild(theClone);
+            })
+        }
+
+    </script>
+
+</body>
+
+</html>
