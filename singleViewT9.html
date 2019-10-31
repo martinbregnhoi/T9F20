@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .indhold {
+            width: 70vw;
+            min-height: 50vh;
+            background: #fff;
+            margin: 4rem auto;
+            padding: 10px;
+        }
+
+        .luk {
+
+            font-size: 2rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <main id="single">
+        <button class="luk">Tilbage</button>
+        <section class="indhold">
+            <article class="enkeltRet">
+                <h2></h2>
+                <p class="text"></p>
+            </article>
+        </section>
+    </main>
+
+    <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get("id");
+        let ret;
+        document.addEventListener("DOMContentLoaded", getJson);
+
+
+        async function getJson() {
+            let jsonData = await fetch(`http://mabe-kea.dk/E19/babushka/wordpress/wp-json/wp/v2/posts/${id}`);
+            ret = await jsonData.json();
+            visRet();
+        }
+
+        function visRet() {
+
+
+                    document.querySelector("h2").textContent = ret.title.rendered;
+                    document.querySelector(".text").innerHTML = ret.content.rendered;
+
+
+        }
+
+        document.querySelector(".luk").addEventListener("click", () => {
+            history.back();
+        })
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

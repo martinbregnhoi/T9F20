@@ -50,6 +50,9 @@
                 const theClone = theTemplatePointer.cloneNode(true).content;
                 theClone.querySelector("h2").textContent = ret.title.rendered;
                 theClone.querySelector("p").innerHTML = ret.excerpt.rendered;
+                theClone.querySelector("article").addEventListener("click",()=>{
+                     location.href = `singleViewT9.html?id=${ret.id}`;
+                })
                 dest.appendChild(theClone);
             })
         }
