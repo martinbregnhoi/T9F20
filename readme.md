@@ -1,1 +1,1 @@
-## Her er alle eksempelfiler fra undervisningen
+## Her er eksempelfiler fra undervisningen i WP REST API, omkring flere endpoints og singleview 
