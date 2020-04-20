@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bistro Babushka</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+
+            display: inline-block;
+            font-size: 20px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, "sans-serif";
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        header {
+            background-color: darkorange;
+        }
+
+        main,
+        nav,
+        .first {
+            max-width: 1000px;
+            margin: 0 auto 20px;
+            padding: 0 20px;
+        }
+
+        .first h4 {
+            font-size: 20px;
+            padding: 10px 0;
+        }
+
+        button {
+            font-size: 1rem;
+            padding: 5px;
+            margin: 5px;
+            display: inline-block;
+            background:none;
+            border: 1px solid darkorange;
+        }
+
+        footer {
+            background: #666;
+            color: #ddd;
+        }
+
+        footer section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 10px;
+        }
+
+        #ret-oversigt {
+
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 20px;
+
+
+        }
+
+        #ret-oversigt h1 {
+            grid-column: 1/4;
+        }
+
+        .overskrifter {
+            border-bottom: 2px solid #000;
+            margin: 10px 0;
+        }
+
+        #ret-oversigt article {
+            cursor: pointer;
+            border: 1px solid darkorange;
+        }
+
+        article h2,
+        article p {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="imgs/red_star.svg" alt="">
+    </header>
+    <nav><button><a href="om-osF20.html">OM OS</a></button>
+        <button>Menupunkt</button>
+        <button>Menupunkt</button>
+        <button>Menupunkt</button>
+        <button>Menupunkt</button>
+        <button>Menupunkt</button></nav>
+    <section class="first"></section>
+    <main>
+        <h1 id="overskrift">Retter</h1>
+        <section id="ret-oversigt"></section>
+    </main>
+    <template>
+        <article>
+            <h2></h2>
+            <img src="" alt="">
+            <p></p>
+        </article>
+    </template>
+    <footer>
+        <section>
+            <address>Addresse: <br>Grønnegade 97<br>1234 København K </address>
+            <aside>Åbningstider: <br> Mandag – fredag 10:30 – 22:00<br>Lørdag 12:00 – 23:00</aside>
+        </section>
+    </footer>
+    <script>
+        let retter = [];
+        let topcontent;
+        const liste = document.querySelector("#ret-oversigt");
+        const skabelon = document.querySelector("template");
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            getJson();
+        }
+
+        async function getJson() {
+            const posturl = "http://mabe-kea.dk/E19/babushka/wordpress/wp-json/wp/v2/ret?per_page=100";
+            const pageurl = "http://mabe-kea.dk/E19/babushka/wordpress/wp-json/wp/v2/pages/5";
+            let response1 = await fetch(posturl);
+            let response2 = await fetch(pageurl);
+            retter = await response1.json();
+            topcontent = await response2.json();
+            visRetter();
+            visTop();
+
+        }
+
+        function visTop() {
+            //console.log(topcontent);
+            document.querySelector(".first").innerHTML = topcontent.content.rendered;
+        }
+
+        function visRetter() {
+            console.log(retter);
+            retter.forEach(ret => {
+                const klon = skabelon.cloneNode(true).content;
+                klon.querySelector("h2").textContent = ret.titel;
+                klon.querySelector("img").src = ret.billede.guid;
+                klon.querySelector("p").innerHTML = ret.pris + " kr";
+                klon.querySelector("article").addEventListener("click", () => {
+                    location.href = `singleViewT9.html?id=${ret.id}`;
+                })
+                liste.appendChild(klon);
+            })
+        }
+    </script>
+
+</body></html>

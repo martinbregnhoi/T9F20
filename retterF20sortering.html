@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bistro Babushka</title>
+    <meta name="description" >
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+
+            display: inline-block;
+            font-size: 20px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, "sans-serif";
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        header {
+            background-color: darkorange;
+        }
+
+        main,
+        nav {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        button {
+            font-size: 1rem;
+            padding: 5px;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .valgt {
+            color: darkorange;
+        }
+
+        footer {
+            background: #666;
+            color: #ddd;
+        }
+
+        footer section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 10px;
+        }
+
+        #ret-oversigt {
+
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 20px;
+
+
+        }
+
+        #ret-oversigt h1 {
+            grid-column: 1/4;
+        }
+
+        .overskrifter {
+            border-bottom: 2px solid #000;
+            margin: 10px 0;
+        }
+
+        #ret-oversigt article {
+            cursor: pointer;
+            border: 1px solid darkorange;
+        }
+
+        article h2,
+        article p {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="imgs/red_star.svg" alt="">
+    </header>
+    <nav></nav>
+    <main>
+        <nav>
+            <button class="filter" data-ret="alle">Alle</button>
+            <button class="filter" data-ret="forretter">Forretter</button>
+            <button class="filter" data-ret="hovedretter">Hovedretter</button>
+            <button class="filter" data-ret="desserter">Desserter</button>
+            <button class="filter" data-ret="drikkevarer">Drikkevarer</button>
+        </nav>
+        <h1 id="overskrift">Retter</h1>
+        <section id="ret-oversigt"></section>
+    </main>
+    <template>
+        <article>
+            <h2></h2>
+            <img src="" alt="">
+            <p></p>
+        </article>
+    </template>
+    <footer>
+        <section>
+            <address>Addresse: <br>Grønnegade 97<br>1234 København K </address>
+            <aside>Åbningstider: <br> Mandag – fredag 10:30 – 22:00<br>Lørdag 12:00 – 23:00</aside>
+        </section>
+    </footer>
+    <script>
+        let retter = [];
+        const liste = document.querySelector("#ret-oversigt");
+        const skabelon = document.querySelector("template");
+        let filterRet = "alle";
+        document.addEventListener("DOMContentLoaded", start);
+
+        function start() {
+            getJson();
+            addEventListenersToButtons();
+        }
+
+        async function getJson() {
+            const url = "http://mabe-kea.dk/E19/babushka/wordpress/wp-json/wp/v2/ret?per_page=100";
+            let response = await fetch(url);
+            retter = await response.json();
+            visRetter();
+
+        }
+
+        function visRetter() {
+            console.log(retter);
+            liste.innerHTML = "";
+            retter.forEach(ret => {
+                if (filterRet == "alle" || filterRet == ret.kategorier) {
+                    const klon = skabelon.cloneNode(true).content;
+                    klon.querySelector("h2").textContent = ret.titel;
+                    klon.querySelector("img").src = ret.billede.guid;
+                    klon.querySelector("p").innerHTML = ret.pris + " kr";
+                    klon.querySelector("article").addEventListener("click", () => {
+                        location.href = `singleViewT9.html?id=${ret.id}`;
+                    })
+                    liste.appendChild(klon);
+                }
+            })
+
+        }
+
+        function addEventListenersToButtons() {
+            document.querySelectorAll("nav button").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+            })
+        }
+
+        function filtrering() {
+            filterRet = this.dataset.ret;
+            console.log(filterRet);
+            document.querySelector("h1").textContent = this.textContent;
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.classList.remove("valgt");
+            });
+            this.classList.add("valgt");
+            visRetter();
+        }
+    </script>
+
+</body></html>

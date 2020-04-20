@@ -12,6 +12,10 @@
             padding: 10px;
         }
 
+        img {
+            max-width: 100%;
+        }
+
         .luk {
 
             font-size: 2rem;
@@ -26,39 +30,39 @@
         <section class="indhold">
             <article class="enkeltRet">
                 <h2></h2>
+                <img src="" alt="">
                 <p class="text"></p>
             </article>
         </section>
     </main>
 
     <script>
+        //find parametre (variabler) i url'en
         let urlParams = new URLSearchParams(window.location.search);
+        //returner værdien for variablen "id"
         let id = urlParams.get("id");
         let ret;
         document.addEventListener("DOMContentLoaded", getJson);
 
-
         async function getJson() {
-            let jsonData = await fetch(`http://mabe-kea.dk/E19/babushka/wordpress/wp-json/wp/v2/posts/${id}`);
+            //hent en enkelt ret udfra id'et
+            let jsonData = await fetch(`http://mabe-kea.dk/E19/babushka/wordpress/wp-json/wp/v2/ret/${id}`);
             ret = await jsonData.json();
             visRet();
         }
-
+        //vis data om retten
         function visRet() {
-
-
-                    document.querySelector("h2").textContent = ret.title.rendered;
-                    document.querySelector(".text").innerHTML = ret.content.rendered;
-
-
+            document.querySelector("h2").textContent = ret.titel;
+            document.querySelector(".text").innerHTML = ret.beskrivelse;
+            document.querySelector("img").src = ret.billede.guid;
         }
 
         document.querySelector(".luk").addEventListener("click", () => {
+            //link tilbage til den foregående side på "luk" knappen
             history.back();
         })
     </script>
-</body>
-</html>
+</body></html>
 
 
 
